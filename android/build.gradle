@@ -34,25 +34,18 @@ android {
         versionCode 1
         versionName computeVersionName()
     }
-    lintOptions {
-        abortOnError false
-    }
 }
 
 repositories {
     mavenCentral()
     google()
     maven {
-        url "$projectDir/../Example/node_modules/react-native/android"
-    }
-    maven {
-        url "$projectDir/../../react-native/android"
+        url "$projectDir/../node_modules/react-native/android"
     }
 }
 
 dependencies {
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    implementation "com.facebook.react:react-native:+"
     testImplementation "junit:junit:4.10"
     testImplementation "org.assertj:assertj-core:1.7.0"
     testImplementation "org.robolectric:robolectric:3.3.2"

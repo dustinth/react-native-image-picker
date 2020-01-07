@@ -69,7 +69,8 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
   private final ReactApplicationContext reactContext;
   private final int dialogThemeId;
 
-  protected Callback callback;
+  protected volatile Callback callback;
+
   private ReadableMap options;
   protected Uri cameraCaptureURI;
   private Boolean noData = false;
@@ -104,6 +105,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
       if (!permissionsGranted)
       {
         responseHelper.invokeError(callback, "Permissions weren't granted");
+        callback = null;
         return false;
       }
 
@@ -232,6 +234,8 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
 
     if (!permissionsCheck(currentActivity, callback, REQUEST_PERMISSIONS_FOR_CAMERA))
     {
+      responseHelper.invokeError(callback, "Permissions weren't granted");
+      this.callback = null;
       return;
     }
 
@@ -262,11 +266,13 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
         cameraCaptureURI = RealPathUtil.compatUriFromFile(reactContext, imageConfig.original);
       }else {
         responseHelper.invokeError(callback, "Couldn't get file path for photo");
+        this.callback = null;
         return;
       }
       if (cameraCaptureURI == null)
       {
         responseHelper.invokeError(callback, "Couldn't get file path for photo");
+        this.callback = null;
         return;
       }
       cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraCaptureURI);
@@ -275,6 +281,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     if (cameraIntent.resolveActivity(reactContext.getPackageManager()) == null)
     {
       responseHelper.invokeError(callback, "Cannot launch camera");
+      this.callback = null;
       return;
     }
 
@@ -297,6 +304,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     {
       e.printStackTrace();
       responseHelper.invokeError(callback, "Cannot launch camera");
+      this.callback = null;
     }
   }
 
@@ -319,6 +327,8 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
 
     if (!permissionsCheck(currentActivity, callback, REQUEST_PERMISSIONS_FOR_LIBRARY))
     {
+      responseHelper.invokeError(callback, "Permissions weren't granted");
+      this.callback = null;
       return;
     }
 
@@ -342,6 +352,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     if (libraryIntent.resolveActivity(reactContext.getPackageManager()) == null)
     {
       responseHelper.invokeError(callback, "Cannot launch photo library");
+      this.callback = null;
       return;
     }
 
@@ -353,6 +364,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     {
       e.printStackTrace();
       responseHelper.invokeError(callback, "Cannot launch photo library");
+      this.callback = null;
     }
   }
 

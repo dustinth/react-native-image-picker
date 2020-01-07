@@ -35,6 +35,10 @@
   "scripts": {},
   "types": "./index.d.ts",
   "license": "MIT",
+  "dependencies": {
+    "react": "16.6.1",
+    "react-native": "0.57.7"
+  },
   "devDependencies": {
     "flow-bin": "0.82.0",
     "husky": "^1.1.0",
