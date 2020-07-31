@@ -325,12 +325,15 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     this.callback = callback;
     this.options = options;
 
+    // 已经在外层进行了PermissionCheck这个逻辑Skip, 并且这个逻辑没有考虑到不需要Camera权限的情况
+    /*
     if (!permissionsCheck(currentActivity, callback, REQUEST_PERMISSIONS_FOR_LIBRARY))
     {
       responseHelper.invokeError(callback, "Permissions weren't granted");
       this.callback = null;
       return;
     }
+    */
 
     parseOptions(this.options);
 
@@ -561,7 +564,6 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
 
     final boolean permissionsGrated = writePermission == PackageManager.PERMISSION_GRANTED &&
             cameraPermission == PackageManager.PERMISSION_GRANTED;
-
     if (!permissionsGrated)
     {
       final Boolean dontAskAgain = ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA);
